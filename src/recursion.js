@@ -33,16 +33,61 @@ var sum = function(array) {
   return result;
 };
 
-
-
 // 3. Sum all numbers in an array containing nested arrays.
 // arraySum([1,[2,3],[[4]],5]); // 15
 var arraySum = function(array) {
+  var copyOfArray = array.slice();
+  var result = 0;
+  if (array.length === 0) {
+    return 0;
+  } else if (array.length === 1) {
+    return array[0];
+  } else {
+    result = copyOfArray.pop();
+    // check if result is an array
+    if (Array.isArray(result)) {
+      // result arraySum() on result
+      //iterate over result
+      // var newResult = 0;
+      // for (var i = 0; i < result.length; i++) {
+      //   if (Array.isArray(result[i])) {
+      //     for (var j = 0; j < result[i].length; j++) {
+      //       // add each ele to result
+      //       newResult += result[i][j];
+      //     }
+      //     return newResult;
+      //   }
+      // }
+      result += sum(result);
+    // end if
+    }
+    return result += arraySum(copyOfArray);
+  }
 };
+// debugger;
+arraySum([1,[2,3],[[4]],5]);
 
 // 4. Check if a number is even.
 var isEven = function(n) {
+  //convert n to positive
+  n = Math.abs(n);
+  // check if n = 0
+  if (n === 0 || n === 2) {
+    // return true
+    return true;
+  // check if dividing n by two results in a whole number greater than 0
+  } else if (n === 1) {
+    // return true
+    return false;
+  } else if ((n - 2) >= 1) {
+    // minus dividend from num; updatedNum
+    var updatedNum = n - 2;
+    // return a call to even on updatedNum
+    return isEven(updatedNum);
+  // end if
+  }
 };
+
 
 // 5. Sum all integers below a given integer.
 // sumBelow(10); // 45
