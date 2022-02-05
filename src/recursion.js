@@ -36,35 +36,26 @@ var sum = function(array) {
 // 3. Sum all numbers in an array containing nested arrays.
 // arraySum([1,[2,3],[[4]],5]); // 15
 var arraySum = function(array) {
-  var copyOfArray = array.slice();
+  // create variable
   var result = 0;
-  if (array.length === 0) {
-    return 0;
-  } else if (array.length === 1) {
-    return array[0];
+  // base case ---- SMALLEST PIECE OF DATE IS: AND SINGLE NUM ELEMENT
+  // if current ele in input array is a number
+  if (!Array.isArray(array)) {
+    // push that ele to new array
+    return result += array;
+  // recursive case ---- WHEN WOULD I HAVE TO CALL MY FUNC AGAIN: WHEN MY ELEMENT IS AN ARRAY
+  // if ele is an array
   } else {
-    result = copyOfArray.pop();
-    // check if result is an array
-    if (Array.isArray(result)) {
-      // result arraySum() on result
-      //iterate over result
-      // var newResult = 0;
-      // for (var i = 0; i < result.length; i++) {
-      //   if (Array.isArray(result[i])) {
-      //     for (var j = 0; j < result[i].length; j++) {
-      //       // add each ele to result
-      //       newResult += result[i][j];
-      //     }
-      //     return newResult;
-      //   }
-      // }
-      result += sum(result);
-    // end if
+    // iterate over that array
+    for (var i = 0; i < array.length; i++) {
+      // access each ele
+      var ele = array[i];
+      // call func on ele
+      result += arraySum(ele);
     }
-    return result += arraySum(copyOfArray);
+    return result;
   }
 };
-// debugger;
 arraySum([1,[2,3],[[4]],5]);
 
 // 4. Check if a number is even.
@@ -93,7 +84,24 @@ var isEven = function(n) {
 // sumBelow(10); // 45
 // sumBelow(7); // 21
 var sumBelow = function(n) {
+  // create result
+  var result = 0;
+  // check if n === 1
+  if (n === 1 || n === 0) {
+    // return 1
+    return 0;
+  } else {
+  // reassign n to n - 1
+  n = n - 1;
+  // reassign result = n
+  result = n;
+  // return a call to func and add to result
+  return result += sumBelow(n);
+  }
+  return result;
 };
+// debugger;
+sumBelow(2);
 
 // 6. Get the integers within a range (x, y).
 // range(2,9); // [3,4,5,6,7,8]
