@@ -412,7 +412,58 @@ countValuesInObj(obj, 'e') // 1
 // 24. Find all keys in an object (and nested objects) by a provided name and rename
 // them to a provided new name while preserving the value stored at that key.
 var replaceKeysInObj = function(obj, oldKey, newKey) {
+  // edge
+  if (Object.keys(obj)[0] === oldKey) {
+
+    // save old value from old key
+    var oldVal = obj[Object.keys(obj)[0]];
+    // add new key with old val
+    obj[newKey] = oldVal;
+    // delete old key
+    delete obj[Object.keys(obj)[0]]
+  }
+  // base case
+  // check if current obj as one key and a value of string
+  if (Object.keys(obj).length === 1 && typeof obj[Object.keys(obj)[0]] === 'string') {
+    // check if current key is the same as old key
+    if (Object.keys(obj)[0] === oldKey) {
+      // save old value from old key
+      var oldVal = obj[Object.keys(obj)[0]];
+      // add new key with old val
+      obj[newKey] = oldVal;
+      // delete old key
+      delete obj[Object.keys(obj)[0]]
+    // end if
+    }
+  // if value of current obj is an object it self
+  } else {
+    // iterate over that obj val
+    for (var prop in obj) {
+      // check if obj[prop] is a string
+      if (typeof obj[prop] === 'string') {
+        // check if prop is the same as oldKey
+        if (prop === oldKey) {
+          // save old value from old key
+          var oldVal = obj[Object.keys(obj)[0]];
+          // add new key with old val
+          obj[newKey] = oldVal;
+          // delete old key
+          delete obj[Object.keys(obj)[0]]
+        }
+      } else {
+        // call replaceKeysInObj on this value with the same old key and new key
+        replaceKeysInObj(obj[prop], oldKey, newKey);
+      }
+    // end loop
+    }
+  //
+  }
+  // return obj
+  return obj;
 };
+// debugger;
+input = {e:{x:'y'},t:{r:{e:'r'},p:{y:'r'}},y:'e'};
+replaceKeysInObj(input, 'e', 'a'); // {a:{x:'y'},t:{r:{a:'r'},p:{y:'r'}},y:'e'};
 
 // 25. Get the first n Fibonacci numbers. In the Fibonacci sequence, each subsequent
 // number is the sum of the previous two.
