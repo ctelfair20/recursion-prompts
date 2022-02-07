@@ -84,29 +84,66 @@ var isEven = function(n) {
 // sumBelow(10); // 45
 // sumBelow(7); // 21
 var sumBelow = function(n) {
-  // create result
-  var result = 0;
-  // check if n === 1
-  if (n === 1 || n === 0) {
-    // return 1
-    return 0;
+  if (n > 0) {
+    // create a var
+    var sum = 0;
+    // base case ---- SMALLEST PIECE OF DATA IS: if num is zero
+    if (n === 0 || n === 1) {
+      return sum += 0;
+    // recursive case ---- WHEN WOULD I HAVE TO CALL THIS FUNC AGAIN: if num is greater than 0
+    } else if (n > 1) {
+      sum += n - 1;
+      return sum += sumBelow(n-1);
+    }
   } else {
-  // reassign n to n - 1
-  n = n - 1;
-  // reassign result = n
-  result = n;
-  // return a call to func and add to result
-  return result += sumBelow(n);
+    // create a var
+    var sum = 0;
+    // base case ---- SMALLEST PIECE OF DATA IS: if num is zero
+    if (n === 0 || n === -1) {
+      return sum += 0;
+    // recursive case ---- WHEN WOULD I HAVE TO CALL THIS FUNC AGAIN: if num is greater than 0
+    } else if (n < 1) {
+      sum += n + 1;
+      return sum += sumBelow(n+1);
+    }
   }
-  return result;
 };
-// debugger;
-sumBelow(2);
+
 
 // 6. Get the integers within a range (x, y).
 // range(2,9); // [3,4,5,6,7,8]
 var range = function(x, y) {
+  // create an empty array
+  var result = [];
+  // edge case
+  if (x === y || x === y - 1) {
+    return [];
+  }
+  // base case ---- SMALLEST PIECE OF DATA IS: X === Y-2
+  if (x === y - 2) {
+    return result.concat(x + 1);
+  }
+  var innerRange = function(x, y) {
+    result = [];
+    // recursive case ---- WHEN WOULD I NEED TO CALL MY FUNC AGAIN:
+    if (x < y - 2 ) {
+      x = x + 1;
+      result.push(x);
+      innerRange(x, y)
+    }
+  }
+  result.concat(innerRange(x, y));
+  return result;
 };
+// debugger;
+// range(8,8) // []
+// range(8,9) // []
+range(2,9) // [3,4,5,6,7,8]
+range(-2,3) // [-1,0,1,2]
+range(-3,-2) // [-2,-1,0,1])
+range(8,2) // [7,6,5,4,3]
+range(-9,-4) // [-8,-7,-6,-5]
+range(3,-3) // [2,1,0,-1,-2]
 
 // 7. Compute the exponent of a number.
 // The exponent of a number says how many times the base number is used as a factor.
@@ -114,21 +151,115 @@ var range = function(x, y) {
 // exponent(4,3); // 64
 // https://www.khanacademy.org/computing/computer-science/algorithms/recursive-algorithms/a/computing-powers-of-a-number
 var exponent = function(base, exp) {
+  // acccumulator
+  var result = 1;
+  var isNeg = false;
+  // edge case
+  if (exp === 0) {
+    return 1;
+  }
+  //check if exp is neg
+  if (exp < 0) {
+    isNeg = true;
+    exp = exp * -1;
+  }
+
+  var innerFunc = function(base, exp) {
+    innerResult = 1;
+    // base case --- smallest data is when exp = 1
+    if (exp === 1) {
+      return base;
+    }
+    // recursive case --- when would i have to call the function again? when exp is greater than 1
+    if (exp > 1) {
+      innerResult *= base;
+      exp -= 1;
+      return innerResult *= exponent(base, exp);
+    }
+  }
+  result = innerFunc(base, exp);
+
+  if (isNeg) {
+    return 1/result;
+  } else {
+    return result;
+  }
 };
+// debugger;
+exponent(3,4)
 
 // 8. Determine if a number is a power of two.
 // powerOfTwo(1); // true
 // powerOfTwo(16); // true
 // powerOfTwo(10); // false
 var powerOfTwo = function(n) {
+  // edge case
+  if (n === 1) {
+    return true
+  }
+  // base case --- smallest piece of data is: 1
+  // check if n is 1
+  if (n === 2) {
+    return true
+  }
+  // check if n squared is a decimal
+  var squareRoot = Math.sqrt(n);
+  if (squareRoot % 1 !== 0) {
+    // return false
+    return false;
+  }
+  // recursive case ---- i would need to recall this function when n is greater than 2
+  // check if n is greater than 2
+  if (n > 2) {
+    // divide n by 2
+    n = Math.sqrt(n);
+    // return a call to function with new n
+    return powerOfTwo(n);
+  }
 };
 
 // 9. Write a function that reverses a string.
 var reverse = function(string) {
+  // accumulative var
+  var result = '';
+  // base case - what is the smallest piece of data i could possibly have? one letter
+  if (string.length === 1) {
+    return string[0];
+  }
+  // recursive case - why would i call func again?
+  if (string.length > 1) {
+    // access last letter; set to result
+    result = string[string.length - 1];
+    // slice off last letter
+    string = string.slice(0, string.length - 1);
+    // return += reverse(new string with last letter sliced off)
+    return result += reverse(string);
+  }
 };
+// debugger;
 
 // 10. Write a function that determines if a string is a palindrome.
 var palindrome = function(string) {
+  var reverseStr = function(string) {
+    var result = '';
+    if (string.length === 1) {
+      return string[0];
+    }
+    // recursive case - why would i call func again?
+    if (string.length > 1) {
+      // access last letter; set to result
+      result = string[string.length - 1];
+      // slice off last letter
+      string = string.slice(0, string.length - 1);
+      // return += reverse(new string with last letter sliced off)
+      return result += reverse(string);
+    }
+  }
+  if (reverseStr(string).toUpperCase() === string.toUpperCase()) {
+    return true;
+  } else {
+    return false;
+  }
 };
 
 // 11. Write a function that returns the remainder of x divided by y without using the
@@ -203,14 +334,80 @@ var rMap = function(array, callback) {
 // countKeysInObj(obj, 'r') // 1
 // countKeysInObj(obj, 'e') // 2
 var countKeysInObj = function(obj, key) {
+  // create an accumulator called sum
+  var sum = 0;
+  // base case
+  // the smallest piece of data is a key and a val
+  // check if current key has a string as value
+  if (Object.keys(obj).length === 1 && typeof obj[Object.keys(obj)[0]] === 'string') {
+    // check if current key is the same as input key
+    if (Object.keys(obj)[0] === key) {
+      // add one to sum and return it
+      return sum += 1;
+    } else {
+      return sum += 0;
+    }
+  } else {
+    // recursive case
+    // iterate over key value pairs
+    for (var prop in obj) {
+      if (prop === key) {
+        sum += 1
+      }
+      // call func on new obj and add result to sum
+      if (typeof obj[prop] === 'object') {
+        sum += countKeysInObj(obj[prop], key);
+      } else {
+        return sum;
+      }
+    }
+  }
+  // return accumulator
+  return sum;
 };
 
+// debugger;
+// countKeysInObj({'e':{'x':'y'},'t':{'r':{'e':'r'},'p':{'y':'r'}},'y':'e'}, 'y');
+
 // 23. Write a function that counts the number of times a value occurs in an object.
-// var obj = {'e':{'x':'y'},'t':{'r':{'e':'r'},'p':{'y':'r'}},'y':'e'};
-// countValuesInObj(obj, 'r') // 2
-// countValuesInObj(obj, 'e') // 1
+var obj = {'e':{'x':'y'},'t':{'r':{'e':'r'},'p':{'y':'r'}},'y':'e'};
+// // countValuesInObj(obj, 'r') // 2
+// // countValuesInObj(obj, 'e') // 1
 var countValuesInObj = function(obj, value) {
+  // create a sum
+  var sum = 0;
+  // base case
+  if (Object.keys(obj).length === 1 && typeof obj[Object.keys(obj)[0]] === 'string') {
+    // check if current key is the same as input key
+    if (obj[Object.keys(obj)[0]] === value) {
+      // add one to sum and return it
+      return sum += 1;
+    } else {
+      return sum += 0;
+    }
+  // recursive case
+  } else {
+    // recursive case
+    // iterate over key value pairs
+    for (var prop in obj) {
+      if (obj[prop] === value) {
+        sum += 1
+      }
+      // call func on new obj and add result to sum
+      if (typeof obj[prop] === 'object') {
+        sum += countValuesInObj(obj[prop], value);
+      } else {
+        return sum;
+      }
+    }
+  }
+  // return accumulator
+  return sum;
 };
+
+// debugger;
+countValuesInObj(obj, 'r') // 2
+countValuesInObj(obj, 'e') // 1
 
 // 24. Find all keys in an object (and nested objects) by a provided name and rename
 // them to a provided new name while preserving the value stored at that key.
